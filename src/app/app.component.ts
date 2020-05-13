@@ -1,20 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewEncapsulation, Inject, ViewChild,ChangeDetectionStrategy  } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import moment from 'moment'
 import {Chart, ChartPoint} from 'chart.js'
+
+import { DateTimePickerComponent } from '@syncfusion/ej2-angular-calendars';
+declare var $: any;
 @Component({
   selector: 'app-root',
-  template: `<ejs-datetimepicker format='yyyy-MM-dd HH:MM' placeholder='Enter date'
-  [value]=dateValue></ejs-datepicker>`,
+  
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
-  public minDate: Date = new Date ("05/07/2017 2:00 AM");
-    public maxDate: Date = new Date ("05/27/2017 11:00 AM");
-    public dateValue: Date = new Date ("05/16/2017 5:00 AM");
-    public dateValue2: Date = new Date ("05/16/2017 5:00 AM");
-    
-    public date:Date=new Date("2017.05.20 05:30")
-    constructor () {}
+  skillForm: FormGroup;
+  public formatDate:String;
+    constructor(private fb: FormBuilder) {
+        this.createForm();
+    }
+    createForm(): void {
+        this.skillForm = this.fb.group({
+            date: [null, Validators.required]
+        });
+    }
+    onChange(args){
+      console.log("changeEvent value (from control instance) :" + args.value);
+      
+    }
+    onBlur(args){
+      console.log("BlurEvent Value :" + this.skillForm.controls.date.value);
+      const momentDate = new Date(this.skillForm.controls.date.value);
+      const formattedDate  = moment(momentDate).format("YYYY-MM-DD_HH:mm:ss")
+      console.log(formattedDate); 
+      this.formatDate=formattedDate;
+     
+    }
+    chartdata=
+    {
+      "dataset1" : Array(2.3,5.7,6.1)
+      
+    };
   title = 'ChartsApp';
   PieChart=[];
   
@@ -22,17 +48,19 @@ export class AppComponent implements OnInit {
 
   ngOnInit()
   {
-
+    
 // pie chart:
-   console.log(this.dateValue);
-
+ 
   this.PieChart.push(new Chart('pieChart', {
     type: 'pie',
   data: {
    labels: ["Total", "Used", "Available"],
+   
+  
    datasets: [{
        
-       data: [2.1 ,6.8, 1.3],
+       data: this.chartdata.dataset1,
+      
        backgroundColor: [
         "#3cb371",  
         "#0000FF",  

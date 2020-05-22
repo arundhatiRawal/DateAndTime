@@ -1,4 +1,4 @@
-import { Component, OnInit,ViewEncapsulation, Inject, ViewChild,ChangeDetectionStrategy  } from '@angular/core';
+import { Component, OnInit,ViewEncapsulation, Inject, ViewChild,ChangeDetectionStrategy ,ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import moment from 'moment'
 import {Chart, ChartPoint} from 'chart.js'
@@ -16,6 +16,8 @@ declare var $: any;
 export class AppComponent implements OnInit {
   skillForm: FormGroup;
   public formatDate:String;
+  @ViewChild('pieChart') canvasRef: ElementRef;
+  @ViewChild('chart') canvasRef1: ElementRef;
     constructor(private fb: FormBuilder) {
         this.createForm();
     }
@@ -36,13 +38,11 @@ export class AppComponent implements OnInit {
       this.formatDate=formattedDate;
      
     }
-    chartdata=
-    {
-      "dataset1" : Array(2.3,5.7,6.1)
-      
-    };
+    
   title = 'ChartsApp';
-  PieChart=[];
+  PieChart:any;
+  Chart:any;
+  
   
  
 
@@ -50,38 +50,65 @@ export class AppComponent implements OnInit {
   {
     
 // pie chart:
- 
-  this.PieChart.push(new Chart('pieChart', {
-    type: 'pie',
-  data: {
-   labels: ["Total", "Used", "Available"],
-   
-  
-   datasets: [{
-       
-       data: this.chartdata.dataset1,
-      
-       backgroundColor: [
-        "#3cb371",  
-        "#0000FF",  
-        "#9966FF",  
-           
-       ],
-       borderColor: [
-        '#3cba9f'
-           
-       ],
-       borderWidth: 1
-   }]
-  }, 
-  options: {
-   title:{
-       text:"Distribution of memory in GB",
-       display:true
-   },
-   
-  }
-  }));
+
+         this.PieChart = new Chart(this.canvasRef.nativeElement.getContext('2d'), {type: 'line',
+         data: {
+          labels: ["April 1st 2020", "April 1st 2020", "August 6th 2020", "August 20th 2020"],
+          
+         
+          datasets: [{
+              
+              data: [80.78, 60.78, 60.78, 40.78],
+              borderColor: 
+               '#3cba9f',
+              fill:false
+          }]
+         }, 
+         options: {
+           responsive:false,
+           maintainAspectRatio:true,
+           legend: {
+             display: false
+           },
+           scales: {
+             xAxes: [{
+               display: true
+             }],
+             yAxes: [{
+               display: true
+             }]
+           }
+          }
+  });
+  this.Chart = new Chart(this.canvasRef1.nativeElement.getContext('2d'), {type: 'line',
+         data: {
+          labels: ["April 1st 2020", "April 1st 2020", "August 6th 2020", "August 20th 2020"],
+          
+         
+          datasets: [{
+              
+              data: [60.78, 40.78, 50.78, 30.78],
+              borderColor: 
+               '#3cba9f',
+              fill:false
+          }]
+         }, 
+         options: {
+           responsive:false,
+           maintainAspectRatio:true,
+           legend: {
+             display: false
+           },
+           scales: {
+             xAxes: [{
+               display: true
+             }],
+             yAxes: [{
+               display: true
+             }]
+           }
+          }
+  });
   
 
 
